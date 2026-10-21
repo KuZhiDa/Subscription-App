@@ -1,0 +1,8 @@
+export const ACCOUNT_SERVICE_SYMBOL = Symbol('accountService')
+export const AUTH_SERVICE_SYMBOL = Symbol('authService')
+export const CATEGORY_SERVICE_SYMBOL = Symbol('categoryService')
+export const NOTIFICATION_SERVICE_SYMBOL = Symbol('notificationService')
+export const PAYMENT_SERVICE_SYMBOL = Symbol('paymentService')
+export const REPORT_SERVICE_SYMBOL = Symbol('reportService')
+export const SUBSCRIPTION_SERVICE_SYMBOL = Symbol('subscriptionService')
+export const USER_SERVICE_SYMBOL = Symbol('userService')
