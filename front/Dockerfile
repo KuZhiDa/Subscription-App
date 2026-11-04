@@ -1,4 +1,4 @@
-FROM node:24-alpine
+FROM node:24
 
 WORKDIR /app
 
@@ -8,6 +8,6 @@ RUN npm ci
 
 COPY . .
 
-RUN npm run build
+EXPOSE 5173
 
 CMD [ "npm", "run", "dev" ]
