@@ -1,0 +1,9 @@
+// use prisma-8
+
+model User {
+  id        Uuid               @id @onCreate(uuid())
+  email     String             @unique
+  username  String
+  createdAt DateTime           @default(now()) @onCreate(now())
+  updatedAt temporal.UpdatedAt
+}

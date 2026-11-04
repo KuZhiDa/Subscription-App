@@ -1,1 +1,3 @@
-export class IAuthService{}
+export class IAuthService{
+    getUserById(id: string){}
+}
