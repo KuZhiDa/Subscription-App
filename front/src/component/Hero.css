@@ -1,0 +1,34 @@
+.hero{
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+    gap: 20px;
+    background: radial-gradient(circle at center, #242044, #0b0b18 70%);
+}
+
+.hero button{
+    background-color: #8174f7;
+    color: white;
+    padding: 14px 30px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.hero button:hover{
+    background-color: #6b5ce7;
+}
+
+.hero h1{
+    font-size: 56px;
+    font-weight: 700;
+}
+
+.hero p{
+    font-size: 18px;
+    color: #aaa;
+}
