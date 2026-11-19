@@ -1,0 +1,19 @@
+.dashboard-statistic {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  text-align: center;
+}
+
+.dashboard-search {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  padding: 10px;
+}
+
+.dashboard-subscriptions div {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  text-align: center;
+}

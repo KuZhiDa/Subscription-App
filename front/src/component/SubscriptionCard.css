@@ -1,0 +1,63 @@
+.subscription-card {
+  background-color: #ffffff;
+  padding: 20px;
+  border: 1px solid #eeeef3;
+  border-radius: 14px;
+  margin-bottom: 12px;
+}
+
+.subscription-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.subscription-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  background-color: #eae5ff;
+  color: #6554c0;
+  border-radius: 12px;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.subscription-main-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.subscription-main-info h3 {
+  color: black;
+  font-size: 17px;
+  margin: 0;
+  padding: 0;
+}
+
+.subscription-main-info span {
+  font-size: 13px;
+  color: #85859a;
+}
+
+.subscription-status {
+  margin-left: auto;
+  padding: 6px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+}
+
+.subscription-status-Active {
+  background-color: lime;
+}
+
+.subscription-status-NotActive {
+  background-color: red;
+}
+
+.subscription-status-Suspended {
+  background-color: orange;
+}

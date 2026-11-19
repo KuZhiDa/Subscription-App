@@ -1,3 +1,5 @@
-export class IAuthService{
-    getUserById(id: string){}
+import { RegisterDto } from '../../presentation/dto/auth.dto';
+
+export class IAuthService {
+  registerUser(data: RegisterDto) {}
 }
