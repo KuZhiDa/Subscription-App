@@ -1,9 +1,113 @@
 // use prisma-8
 
 model User {
+  id            Uuid               @id @onCreate(uuid())
+
+  email         String             @unique
+  username      String
+  role          Role               @default(User)
+  password      String
+  twoFaAuth     Boolean            @map("two_fa_auth")
+  confirmed     Boolean            @default(false) 
+
+  createdAt     DateTime           @default(now()) @onCreate(now()) @map("created_at")
+  updatedAt     temporal.UpdatedAt @map("updated_at")
+
+  accounts      AccountUser[]      @relation("AccountUser")
+  subscriptions Subscription[]     @relation("UserSubscription")
+  tokens        Session[]          @relation("UserSession")
+
+  @@map("user")
+}
+
+model Session {
   id        Uuid               @id @onCreate(uuid())
-  email     String             @unique
-  username  String
-  createdAt DateTime           @default(now()) @onCreate(now())
-  updatedAt temporal.UpdatedAt
+  userId    Uuid               @map("user_id")
+
+  token     String             @unique
+
+  createdAt DateTime           @default(now()) @onCreate(now()) @map("created_at")
+  updatedAt temporal.UpdatedAt @map("updated_at")
+  deletedAt DateTime?          @map("deleted_at")
+
+  user      User               @relation("UserSession", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("session")
+}
+
+model AccountUser {
+  id            Uuid           @id @onCreate(uuid())
+  userId        Uuid           @map("user_id")
+
+  login         String
+
+  user          User           @relation("AccountUser", fields: [userId], references: [id], onDelete: Cascade)
+  subscriptions Subscription[] @relation("AccountSubscription")
+
+  @@unique([userId, login])
+  @@map("account_user")
+}
+
+model Subscription {
+  id        Uuid               @id @onCreate(uuid())
+  userId    Uuid               @map("user_id")
+  accountId Uuid?              @map("account_id")
+
+  name      String
+  category  Category
+  status    Status
+
+  createdAt DateTime           @default(now()) @onCreate(now()) @map("created_at")
+  updatedAt temporal.UpdatedAt @map("updated_at")
+  deletedAt DateTime?          @map("deleted_at")
+
+  user      User               @relation("UserSubscription", fields: [userId], references: [id], onDelete: Cascade)
+  account   AccountUser?       @relation("AccountSubscription", fields: [accountId], references: [id], onDelete: SetNull)
+  payments  Payment[]          @relation("SubscriptionPayment")
+
+  @@unique([userId, name])
+  @@map("subscription")
+}
+
+model Payment {
+  id             Uuid         @id @onCreate(uuid())
+  subscriptionId Uuid         @map("subscription_id")
+
+  period         Period
+  count          Int
+  price          Float
+  paymentDate    DateTime     @default(now()) @onCreate(now()) @map("payment_date")
+
+  subscription   Subscription @relation("SubscriptionPayment", fields: [subscriptionId], references: [id], onDelete: Cascade)
+
+  @@map("payment")
+}
+
+enum Role {
+  Admin
+  User
+}
+
+enum Period {
+  Day
+  Week
+  Month
+  Year
+  Lifetime
+}
+
+enum Category {
+  Music
+  Cinema
+  Games
+  Books
+  TV
+  Education
+  Other
+}
+
+enum Status {
+  Active
+  Paused
+  Canceled
 }

@@ -18,6 +18,6 @@ export class AuthController {
   })
   @Post('register')
   async registerUser(@Body() data: RegisterDto) {
-    this.authService.registerUser(data);
+    return await this.authService.registerUser(data);
   }
 }

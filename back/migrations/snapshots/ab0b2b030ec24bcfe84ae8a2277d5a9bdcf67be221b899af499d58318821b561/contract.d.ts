@@ -23,9 +23,9 @@ import type {
 } from '@prisma/orm-postgres/contract/types';
 
 export type StorageHash =
-  StorageHashBase<'e75623dc73ab412a0236340bcc3ae4c65378ec3b9d4b136cac4e4dc77e6be363'>;
+  StorageHashBase<'ab0b2b030ec24bcfe84ae8a2277d5a9bdcf67be221b899af499d58318821b561'>;
 export type ExecutionHash =
-  ExecutionHashBase<'67cb9094f84a5b107b2ba290f5d1104f2e7081a6bfec222c19dc0c38b6dc9f60'>;
+  ExecutionHashBase<'de1e091a871ac19c1efed6b2ae024529444ec9b7f579fd3cbc0ec95acb4fc3ff'>;
 export type ProfileHash =
   ProfileHashBase<'3916f444a8a17ad749191acf9e08dad97d1a327b88c2f1d45d12f240296aa8b2'>;
 
@@ -275,7 +275,15 @@ type DefaultLiteralValue<CodecId extends string, Encoded> = CodecId extends keyo
   : Encoded;
 type ParameterizedOutputTypeFunctions = PgParameterizedOutputTypes;
 
-type FieldTypeOverrides = {};
+type FieldTypeOverrides = {
+  readonly public: {
+    readonly models: {
+      readonly User: {
+        readonly role: { readonly output: 'Admin' | 'User'; readonly input: 'Admin' | 'User' };
+      };
+    };
+  };
+};
 export type FieldOutputTypes = FieldTypesFromDomain<
   ContractBase['domain']['namespaces'],
   CodecTypes,
@@ -292,7 +300,13 @@ export type FieldInputTypes = FieldTypesFromDomain<
   'input',
   ContractBase['storage']['namespaces']
 >;
-type ColumnTypeOverrides = {};
+type ColumnTypeOverrides = {
+  readonly public: {
+    readonly user: {
+      readonly role: { readonly output: 'Admin' | 'User'; readonly input: 'Admin' | 'User' };
+    };
+  };
+};
 export type StorageColumnTypes = ColumnTypesFromStorage<
   ContractBase['storage'],
   CodecTypes,
@@ -310,9 +324,13 @@ export type StorageColumnInputTypes = ColumnTypesFromStorage<
 
 export namespace Models {
   export type public_User = {
+    confirmed: FieldOutputTypes['public']['User']['confirmed'];
     createdAt: FieldOutputTypes['public']['User']['createdAt'];
     email: FieldOutputTypes['public']['User']['email'];
     id: FieldOutputTypes['public']['User']['id'];
+    password: FieldOutputTypes['public']['User']['password'];
+    role: FieldOutputTypes['public']['User']['role'];
+    twoFaAuth: FieldOutputTypes['public']['User']['twoFaAuth'];
     updatedAt: FieldOutputTypes['public']['User']['updatedAt'];
     username: FieldOutputTypes['public']['User']['username'];
     readonly [RelationKeys]?: never;
@@ -343,8 +361,14 @@ type ContractBase = Omit<
         readonly kind: 'postgres-schema';
         readonly entries: {
           readonly table: {
-            readonly User: {
+            readonly user: {
               columns: {
+                readonly confirmed: {
+                  readonly dataType: 'pg/bool';
+                  readonly codecId: 'pg/bool@1';
+                  readonly nullable: false;
+                  readonly many: false;
+                };
                 readonly createdAt: {
                   readonly dataType: 'pg/timestamptz';
                   readonly codecId: 'pg/timestamptz-date@1';
@@ -362,6 +386,24 @@ type ContractBase = Omit<
                 readonly id: {
                   readonly dataType: 'pg/uuid';
                   readonly codecId: 'pg/uuid@1';
+                  readonly nullable: false;
+                  readonly many: false;
+                };
+                readonly password: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                  readonly many: false;
+                };
+                readonly role: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                  readonly many: false;
+                };
+                readonly twoFaAuth: {
+                  readonly dataType: 'pg/bool';
+                  readonly codecId: 'pg/bool@1';
                   readonly nullable: false;
                   readonly many: false;
                 };
@@ -385,6 +427,12 @@ type ContractBase = Omit<
               foreignKeys: readonly [];
             };
           };
+          readonly valueSet: {
+            readonly Role: {
+              readonly kind: 'valueSet';
+              readonly values: readonly ['Admin', 'User'];
+            };
+          };
         };
       };
     };
@@ -395,7 +443,7 @@ type ContractBase = Omit<
   readonly target: 'postgres';
   readonly targetFamily: 'sql';
   readonly roots: {
-    readonly User: { readonly namespace: 'public' & NamespaceId; readonly model: 'User' };
+    readonly user: { readonly namespace: 'public' & NamespaceId; readonly model: 'User' };
   };
   readonly domain: {
     readonly namespaces: {
@@ -403,6 +451,10 @@ type ContractBase = Omit<
         readonly models: {
           readonly User: {
             readonly fields: {
+              readonly confirmed: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/bool@1' };
+              };
               readonly createdAt: {
                 readonly nullable: false;
                 readonly type: {
@@ -419,6 +471,18 @@ type ContractBase = Omit<
                 readonly nullable: false;
                 readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
               };
+              readonly password: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly role: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly twoFaAuth: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/bool@1' };
+              };
               readonly updatedAt: {
                 readonly nullable: false;
                 readonly type: {
@@ -434,17 +498,36 @@ type ContractBase = Omit<
             };
             readonly relations: Record<string, never>;
             readonly storage: {
-              readonly table: 'User';
+              readonly table: 'user';
               readonly namespaceId: 'public';
               readonly fields: {
+                readonly confirmed: { readonly column: 'confirmed' };
                 readonly createdAt: { readonly column: 'createdAt' };
                 readonly email: { readonly column: 'email' };
                 readonly id: { readonly column: 'id' };
+                readonly password: { readonly column: 'password' };
+                readonly role: { readonly column: 'role' };
+                readonly twoFaAuth: { readonly column: 'twoFaAuth' };
                 readonly updatedAt: { readonly column: 'updatedAt' };
                 readonly username: { readonly column: 'username' };
               };
             };
           };
+        };
+        readonly enum: {
+          readonly Role: {
+            readonly codecId: 'pg/text@1';
+            readonly members: readonly [
+              { readonly name: 'Admin'; readonly value: 'Admin' },
+              { readonly name: 'User'; readonly value: 'User' },
+            ];
+          };
+        };
+        readonly enumMemberTypes?: {
+          readonly Role: readonly [
+            { readonly name: 'Admin'; readonly value: 'Admin' },
+            { readonly name: 'User'; readonly value: 'User' },
+          ];
         };
       };
     };
@@ -488,7 +571,7 @@ type ContractBase = Omit<
             readonly params: { readonly precision: 3 };
           };
           readonly ref: {
-            readonly entry: 'User';
+            readonly entry: 'user';
             readonly field: 'createdAt';
             readonly namespace: 'public';
           };
@@ -496,7 +579,7 @@ type ContractBase = Omit<
         {
           readonly onCreate: { readonly id: 'uuidv4'; readonly kind: 'generator' };
           readonly ref: {
-            readonly entry: 'User';
+            readonly entry: 'user';
             readonly field: 'id';
             readonly namespace: 'public';
           };
@@ -513,7 +596,7 @@ type ContractBase = Omit<
             readonly params: { readonly precision: 3 };
           };
           readonly ref: {
-            readonly entry: 'User';
+            readonly entry: 'user';
             readonly field: 'updatedAt';
             readonly namespace: 'public';
           };

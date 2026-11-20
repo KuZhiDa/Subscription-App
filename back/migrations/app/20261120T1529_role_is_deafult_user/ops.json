@@ -1,0 +1,74 @@
+[
+  {
+    "id": "setDefault.user.confirmed",
+    "label": "Set default on \"user\".\"confirmed\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "confirmed",
+        "table": "user"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"confirmed\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "user",
+          "confirmed"
+        ],
+        "expectation": {
+          "expects": "present",
+          "object": "column \"confirmed\" on \"user\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "set default on \"confirmed\"",
+        "sql": "ALTER TABLE \"public\".\"user\" ALTER COLUMN \"confirmed\" SET DEFAULT false"
+      }
+    ],
+    "postcheck": []
+  },
+  {
+    "id": "setDefault.user.role",
+    "label": "Set default on \"user\".\"role\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "role",
+        "table": "user"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"role\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "user",
+          "role"
+        ],
+        "expectation": {
+          "expects": "present",
+          "object": "column \"role\" on \"user\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "set default on \"role\"",
+        "sql": "ALTER TABLE \"public\".\"user\" ALTER COLUMN \"role\" SET DEFAULT 'User'"
+      }
+    ],
+    "postcheck": []
+  }
+]
