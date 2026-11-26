@@ -1,1 +1,1 @@
-export class INotificationService{}
+export interface INotificationService {}

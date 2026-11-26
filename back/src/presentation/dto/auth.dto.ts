@@ -7,7 +7,7 @@ import {
   Matches,
 } from 'class-validator';
 
-export class RegisterDto {
+class UserDto {
   @ApiProperty({
     description: 'Email пользователя.',
     example: 'dimad@yandex.ru',
@@ -15,14 +15,6 @@ export class RegisterDto {
   @IsNotEmpty({ message: 'Почта должна быть заполнена!' })
   @IsEmail({}, { message: 'Не верно введена почта!' })
   email: string;
-
-  @ApiProperty({
-    description: 'Username пользователя.',
-    example: 'Dimulia',
-  })
-  @IsNotEmpty({ message: 'Поле username должно быть заполнено!' })
-  @Length(4, 16, { message: 'Username содержит от 4 до 16 символов' })
-  username: string;
 
   @ApiProperty({
     description: 'Пароль пользователя.',
@@ -35,6 +27,16 @@ export class RegisterDto {
       'Пароль не соответствует требованиям: нужна хотя бы одна заглавная буква, одна строчная, одна цифра и один спецсимвол!',
   })
   password: string;
+}
+
+export class RegisterDto extends UserDto {
+  @ApiProperty({
+    description: 'Username пользователя.',
+    example: 'Dimulia',
+  })
+  @IsNotEmpty({ message: 'Поле username должно быть заполнено!' })
+  @Length(4, 16, { message: 'Username содержит от 4 до 16 символов' })
+  username: string;
 
   @ApiProperty({
     description: 'Флаг двухфакторной аутентификации.',
@@ -42,4 +44,10 @@ export class RegisterDto {
   })
   @IsBoolean()
   twoFaAuth: boolean = false;
+}
+
+export class LoginDto extends UserDto {}
+
+export class ReturnLoginDto {
+  accessToken: string;
 }

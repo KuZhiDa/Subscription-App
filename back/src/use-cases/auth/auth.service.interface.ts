@@ -1,7 +1,12 @@
-import { RegisterDto } from '../../presentation/dto/auth.dto';
+import {
+  LoginDto,
+  RegisterDto,
+  ReturnLoginDto,
+} from '../../presentation/dto/auth.dto';
+import type { User } from '../../prisma/type';
 
-export class IAuthService {
-  async registerUser(data: RegisterDto): Promise<any> {
-    throw new Error('Method not implemented');
-  }
+export interface IAuthService {
+  registerUser(data: RegisterDto): Promise<User>;
+
+  loginUser(data: LoginDto): Promise<ReturnLoginDto>;
 }

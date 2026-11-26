@@ -1,1 +1,1 @@
-export class ICategoryService{}
+export interface ICategoryService {}

@@ -1,1 +1,1 @@
-export class IPaymentService{}
+export interface IPaymentService {}

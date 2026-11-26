@@ -1,1 +1,1 @@
-export class IReportService{}
+export interface IReportService {}

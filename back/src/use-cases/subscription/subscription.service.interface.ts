@@ -1,1 +1,1 @@
-export class ISubscriptionService{}
+export interface ISubscriptionService {}
